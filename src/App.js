@@ -34,8 +34,8 @@ export default function App() {
             }}
           />
         ) : (
-          <div key={1}  style={{display: 'flex', gap: '40px'}}>
-            <div style={{ width: 300, height: 200, marginTop: 15 }} onClick={() => {
+          <div key={1} className="board-list">
+            <div className="board-item" onClick={() => {
               if (isEditing) {
                 if (!editor) return
                 setIsDarkMode(editor.user.getIsDarkMode())
@@ -62,7 +62,7 @@ export default function App() {
                 format={format}
               />
             </div>
-            <div key={2} style={{ width: 300, height: 200, marginTop: 15 }} onClick={() => {
+            <div key={2} className="board-item" onClick={() => {
               if (isEditing) {
                 if (!editor) return
                 setIsDarkMode(editor.user.getIsDarkMode())
@@ -89,7 +89,7 @@ export default function App() {
                 format={format}
               />
             </div>
-            <div key={3} style={{ width: 300, height: 200, marginTop: 15 }} onClick={() => {
+            <div key={3} className="board-item" onClick={() => {
               if (isEditing) {
                 if (!editor) return
                 setIsDarkMode(editor.user.getIsDarkMode())

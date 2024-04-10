@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Editor, StoreSnapshot, TLPageId, TLRecord, Tldraw, TldrawImage } from 'tldraw'
+import { Box, Tldraw, TldrawImage } from 'tldraw'
 import 'tldraw/tldraw.css'
 import initialSnapshot from './snapshot.json'
 

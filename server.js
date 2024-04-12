@@ -27,7 +27,6 @@ const server = http.createServer((req, res) => {
     });
   }
 });
-console.log('process.env', process.env)
 const PORT = process.env.PORT || 3030;
 
 server.listen(PORT, () => {

@@ -12,6 +12,8 @@ export default function App() {
   const [viewportPageBounds, setViewportPageBounds] = useState(new Box(0, 0, 600, 400))
   const [isEditing, setIsEditing] = useState(false)
   const [format, setFormat] = useState('svg')
+  
+  console.log('isEditing', isEditing)
 
   return (
     <div style={{ padding: 30 }}>

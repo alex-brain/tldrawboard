@@ -1,8 +1,16 @@
 import "./App.css";
-import { Tldraw, createTLStore, defaultShapeUtils, throttle, TldrawImage } from "tldraw";
+import {
+  Tldraw,
+  createTLStore,
+  defaultShapeUtils,
+  throttle,
+  TldrawImage,
+} from "tldraw";
 import "./index.css";
 import "tldraw/tldraw.css";
 import { useEffect, useLayoutEffect, useState } from "react";
+import Modal from "./components/Modal/Modal";
+import NewBoardForm from "./components/NewBoardForm/NewBoardForm";
 
 function App() {
   function uuidv4() {
@@ -18,6 +26,10 @@ function App() {
 
   const [boards, setBoards] = useState([]);
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [newBoardTitle, setIsNewBoardTitle] = useState("");
+  const [newBoardDescription, setIsNewBoardDescription] = useState("");
+
   const localStorageArray = JSON.parse(localStorage.getItem("boards"));
 
   if (!localStorageArray) {
@@ -25,11 +37,13 @@ function App() {
   }
 
   useEffect(() => {
-		const TLBoardsArray = localStorageArray?.map((item) => ({
-			id: item.id,
-			store: createTLStore({ shapeUtils: defaultShapeUtils }),
-			loadingState: { status: "loading" },
-		}));
+    const TLBoardsArray = localStorageArray?.map((item) => ({
+      id: item.id,
+      boardName: item.boardName,
+      boardDescription: item.boardDescription,
+      store: createTLStore({ shapeUtils: defaultShapeUtils }),
+      loadingState: { status: "loading" },
+    }));
 
     setBoards([...boards, ...TLBoardsArray]);
   }, []);
@@ -39,15 +53,23 @@ function App() {
       id: "board-" + uuidv4(),
       store: createTLStore({ shapeUtils: defaultShapeUtils }),
       loadingState: { status: "loading" },
+      boardName: newBoardTitle,
+      boardDescription: newBoardDescription,
     };
     setBoards([...boards, newBoard]);
 
-    const newBoardId = {
+    const newBoardItem = {
       id: newBoard.id,
+      boardName: newBoardTitle,
+      boardDescription: newBoardDescription,
     };
-    localStorageArray.push(newBoardId);
+    localStorageArray.push(newBoardItem);
     const updatedArray = JSON.stringify(localStorageArray);
     localStorage.setItem("boards", updatedArray);
+
+    setIsOpenModal(false);
+    setIsNewBoardTitle("");
+    setIsNewBoardDescription("");
   };
 
   const [activeBoard, setActiveBoard] = useState(null);
@@ -68,9 +90,8 @@ function App() {
       if (persistedSnapshot) {
         try {
           const snapshot = JSON.parse(persistedSnapshot);
-          console.log(snapshot);
           board.store.loadSnapshot(snapshot);
-          board.snapshot = snapshot; 
+          board.snapshot = snapshot;
           setLoadingState({ status: "ready" });
         } catch (error) {
           setLoadingState({ status: "error", error: error.message }); // Something went wrong
@@ -80,13 +101,16 @@ function App() {
       }
 
       // Each time the store changes, run the (debounced) persist function
-      console.log(board.store);
-      // const snapshot = board.store.getSnapshot();
-      // console.log('snapshot', snapshot)
       const cleanupFn = board.store.listen(
         throttle(() => {
           const snapshot = board.store.getSnapshot();
-          localStorage.setItem(board.id, JSON.stringify(snapshot));
+          const newBoard = {
+            id: board.id,
+            boardName: board.boardName,
+            boardDescription: board.boardDescription,
+            ...snapshot,
+          };
+          localStorage.setItem(board.id, JSON.stringify(newBoard));
         }, 500)
       );
 
@@ -95,10 +119,7 @@ function App() {
       };
     });
     setLoadingState({ status: "ready" }); // Nothing persisted, continue with the empty store
-
   }, [boards, activeBoard]);
-  
-  console.log('boards', boards)
 
   if (loadingState.status === "loading") {
     return (
@@ -119,9 +140,17 @@ function App() {
 
   return (
     <div className="App">
+      <NewBoardForm
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        addNewBoard={addNewBoard}
+        newBoardTitle={newBoardTitle}
+        newBoardDescription={newBoardDescription}
+        setIsNewBoardTitle={setIsNewBoardTitle}
+        setIsNewBoardDescription={setIsNewBoardDescription}
+      />
       {!activeBoard ? (
         <>
-          <button onClick={addNewBoard}>Add new board</button>
           <div
             className="tldraw__container"
             style={{
@@ -131,20 +160,34 @@ function App() {
               overflowY: "auto",
             }}
           >
+            <div className="tldraw__button_item">
+              <div
+                onClick={() => setIsOpenModal(true)}
+                className="tldraw__button_item_content"
+              >
+                Добавить новую доску
+              </div>
+            </div>
+
             {boards?.map((board) => (
-              <div key={board.id} className="tldraw__item">
-                <div
-                  className="tldraw__item_cover"
-                  onClick={() => {
-                    setActiveBoard(board);
-                  }}
-                />
-                <TldrawImage
-                  store={board.store}
-                  snapshot={board.snapshot}
-                  className="tldraw__board disabled"
-                  hideUi
-                />
+              <div key={board.id} className="tldraw__board_container">
+                <h1 className="tldraw__title">{board.boardName}</h1>
+                <p className="tldraw__description">{board.boardDescription}</p>
+                <div className="tldraw__item">
+                  <div
+                    className="tldraw__item_cover"
+                    onClick={() => {
+                      setActiveBoard(board);
+                    }}
+                  />
+
+                  <TldrawImage
+                    store={board.store}
+                    snapshot={board.snapshot}
+                    className="tldraw__board disabled"
+                    hideUi
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -171,54 +214,3 @@ function App() {
 }
 
 export default App;
-
-
-/*
-
-import { createContext, useContext, useState } from 'react'
-import { Editor, Tldraw } from 'tldraw'
-import 'tldraw/tldraw.css'
-
-const FocusedEditorContext = createContext({})
-
-export default function InlineExample() {
-  const [focusedEditor, setFocusedEditor] = useState(null)
-  return (
-    <FocusedEditorContext.Provider value={{ focusedEditor, setFocusedEditor }}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: 32,
-          paddingTop: 12,
-          gap: 12,
-        }}
-      >
-        <InlineEditor width={500} height={300} />
-      </div>
-    </FocusedEditorContext.Provider>
-  )
-}
-
-function InlineEditor({ width, height }) {
-  const { focusedEditor, setFocusedEditor } = useContext(FocusedEditorContext)
-
-  const title = `${width} x ${height}`
-
-  const handleMount = (editor) => {
-    editor.updateInstanceState({ isDebugMode: false })
-    const shapshot = editor.store.getSnapshot();
-    console.log('shapshot', shapshot)
-  }
-
-  return (
-    <div>
-      <h2>{title}</h2>
-      <div style={{ width, height }} onFocus={() => setFocusedEditor(title)}>
-        <Tldraw onMount={handleMount} autoFocus={focusedEditor === title} />
-      </div>
-    </div>
-  )
-}
- */

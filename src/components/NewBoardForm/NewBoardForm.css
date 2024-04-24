@@ -1,0 +1,67 @@
+.new_board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  width: 300px;
+}
+
+.new_board__title {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.new_board__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25em;
+  width: 100%;
+}
+
+.new_board__label {
+  font-size: 0.75em;
+  color: #7c8195;
+}
+
+.new_board__input {
+  background-color: #f5f8fa;
+  border: 1px solid #bec9d3;
+  font-family: inherit;
+  color: #1e1f25;
+  padding: 0.542em 1em;
+  outline: none;
+  font-size: 0.75em;
+  font-weight: 400;
+  border-radius: 0.3125em;
+  transition: 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.new_board__buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+  margin-top: 0.5em;
+}
+
+.new_board__button {
+  cursor: pointer;
+  padding: 0.75em 1em;
+  border: 1px solid #00b5ff;
+  border-radius: 0.5em;
+  font-size: 0.75em;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  background-color: #fff;
+  color: #00b5ff;
+}
+
+.new_board__button.add {
+  color: #fff;
+  background: #00b5ff;
+}

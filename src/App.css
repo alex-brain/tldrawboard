@@ -40,13 +40,59 @@
   gap: 0.25em;
 }
 
+.tldraw__board_header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.tldraw__board_close {
+  position: relative;
+  width: 1.2em;
+  height: 1.2em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tldraw__board_close::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0.1em;
+  background-color: #000000;
+  transform: rotate(45deg);
+}
+
+.tldraw__board_close::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0.1em;
+  background-color: #000000;
+  transform: rotate(-45deg);
+}
+
 .tldraw__title {
   margin: 0;
   font-size: 1.5em;
+  max-width: 250px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tldraw__description {
   margin: 0;
+  max-width: 250px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tldraw__item {

@@ -9,12 +9,13 @@ const NewBoardForm = ({
   setIsNewBoardTitle,
   setIsNewBoardDescription,
   onClose,
-  addNewBoard,
+  onEnter,
+  title
 }) => {
   return (
     <Modal isOpen={isOpen}>
       <div className="new_board">
-        <h1 className="new_board__title">Новая доска</h1>
+        <h1 className="new_board__title">{title}</h1>
         <div className="new_board__item">
           <label className="new_board__label">Имя доски</label>
           <input
@@ -40,7 +41,7 @@ const NewBoardForm = ({
             <div
               className="new_board__button add"
               onClick={
-                newBoardTitle && newBoardDescription ? addNewBoard : null
+                newBoardTitle && newBoardDescription ? onEnter : null
               }
             >
               Сохранить

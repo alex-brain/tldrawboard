@@ -2382,16 +2382,26 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-"@tldraw/editor@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@tldraw/editor/-/editor-2.0.2.tgz#2e4fd3c14fd2d079554d7d111531ab4bbc4861cc"
-  integrity sha512-ik7JvBQv9AsvkGhBfNkPdM0m+cBiarfPLrzlgyB2dec4lWQOIIL/p9J+28FUWQ4bzDvD6JN0eGXnsGj754ypQg==
+"@tldraw/core@^1.23.2":
+  version "1.23.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/core/-/core-1.23.2.tgz#de043c6ae91b8a21532104819f48da98de5bd372"
+  integrity sha512-cx+KfqemSHvVonNGwEolosMOsJt5cl3PGRBaXcZOOXQxnFALF22dnMtm6lbmlQQA71EfqNMP5e+qV3jCwuYaqA==
   dependencies:
-    "@tldraw/state" "2.0.2"
-    "@tldraw/store" "2.0.2"
-    "@tldraw/tlschema" "2.0.2"
-    "@tldraw/utils" "2.0.2"
-    "@tldraw/validate" "2.0.2"
+    "@tldraw/intersect" "^1.9.2"
+    "@tldraw/vec" "^1.9.2"
+    "@use-gesture/react" "^10.2.19"
+    perfect-freehand "^1.1.0"
+
+"@tldraw/editor@2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@tldraw/editor/-/editor-2.1.4.tgz#084a2270aed85f9eeae8d770cc9dc3d4a5ea9d6d"
+  integrity sha512-zeifkXS//2X/oonr2YYIIrRt6PRwri6c60sPzx0djhNK5LC9b0um8Lu1lLcIZip468WEeBYpcc9cPui1OXi7qQ==
+  dependencies:
+    "@tldraw/state" "2.1.4"
+    "@tldraw/store" "2.1.4"
+    "@tldraw/tlschema" "2.1.4"
+    "@tldraw/utils" "2.1.4"
+    "@tldraw/validate" "2.1.4"
     "@types/core-js" "^2.5.5"
     "@use-gesture/react" "^10.2.27"
     classnames "^2.3.2"
@@ -2403,43 +2413,55 @@
     lodash.uniq "^4.5.0"
     nanoid "4.0.2"
 
-"@tldraw/state@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@tldraw/state/-/state-2.0.2.tgz#f23c724476c6d954d4f3f3e3b71e0bd33407f1c0"
-  integrity sha512-8736faV/vTDipYa6xpTG2l3XJgwu1lR4wAwobW/AdiflWBoxiejK4GZyVhb1HtSvcb9EV/ZDOG9SAwG2cKUw9A==
-
-"@tldraw/store@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@tldraw/store/-/store-2.0.2.tgz#36090dfefa6945d3002668e19761665cf8db9e5f"
-  integrity sha512-02Wg37GiVGoUXxpcyLaoyOMUXn62OxuwcN3Ij7nVxHs7XGJmeMdWKodFMSss1Jh7lzJJMS5r8BJ3knB/ENdcWA==
+"@tldraw/intersect@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/intersect/-/intersect-1.9.2.tgz#1ba20406a8f3da24a59e9c00a5f526ad2358092f"
+  integrity sha512-teUQLy+p5YT4PIKOHaL+zM0NYD1779mPp02xabP+5LGLvv7tt9VaqJ9D899EYppQbBLN6be6CJUrmibrvLtnUQ==
   dependencies:
-    "@tldraw/state" "2.0.2"
-    "@tldraw/utils" "2.0.2"
+    "@tldraw/vec" "^1.9.2"
+
+"@tldraw/state@2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@tldraw/state/-/state-2.1.4.tgz#a16495e0b4dfcc2a51ccd3f0dbc30cc067e46b5b"
+  integrity sha512-eLgeIz76hobnOhvBobeo3iYhEpsNVH7ozUYyH4VIYFfNy9TuRi7klAJ55bA86iCNAnBIgqhXvsCn5VDlVu9rTA==
+
+"@tldraw/store@2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@tldraw/store/-/store-2.1.4.tgz#8f65c7ef45de55e8d7a11897495bb1a0610d6c83"
+  integrity sha512-g9jYNObGVgd4TXKDCSLm4Hs0xKYPVQVq6hSGL6zY26EYvpa7RV1JQ6vc+gO3da/NtaYsLBJ0UoXpb61e/hyumQ==
+  dependencies:
+    "@tldraw/state" "2.1.4"
+    "@tldraw/utils" "2.1.4"
     lodash.isequal "^4.5.0"
     nanoid "4.0.2"
 
-"@tldraw/tlschema@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@tldraw/tlschema/-/tlschema-2.0.2.tgz#b4925a9155d74354b0b3608276f3fdf2e78d8b76"
-  integrity sha512-gpSdyl7n5vMutgSX7+1dvZj6DGxQhCyDMhOmuWQGkTuQrbp/RmOIRwxAfLRIZCJstKKohy/skc3XzAhL5wEbHQ==
+"@tldraw/tlschema@2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@tldraw/tlschema/-/tlschema-2.1.4.tgz#8907aab828b3f905f31d4e4065d5431f20c7611d"
+  integrity sha512-IRb7AJmsvMFQl2G+BXB3eWdWX053KwLryHq+UI4FmJ/Xl0M6td9b3XZcv33UpwRrhsZISM97xRKCuglLuKu9nA==
   dependencies:
-    "@tldraw/state" "2.0.2"
-    "@tldraw/store" "2.0.2"
-    "@tldraw/utils" "2.0.2"
-    "@tldraw/validate" "2.0.2"
+    "@tldraw/state" "2.1.4"
+    "@tldraw/store" "2.1.4"
+    "@tldraw/utils" "2.1.4"
+    "@tldraw/validate" "2.1.4"
     nanoid "4.0.2"
 
-"@tldraw/utils@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@tldraw/utils/-/utils-2.0.2.tgz#692e7a937efbb6e26575a9c258ccc2eec91cdd33"
-  integrity sha512-oXqCF2fERXG7e30npML/zMGtyRWIfgUXVvgdXtWR/S7/mwVU0MeY9YJ7eAuY+iIFshpV9MM99tQxqUZKVJ6NNw==
+"@tldraw/utils@2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@tldraw/utils/-/utils-2.1.4.tgz#0d67015e2e2643aa2a4c0a14d7e3e4e8f460bc78"
+  integrity sha512-C1py+hHpLdqTLWraua4f4U1FRonQtwzTJozeOpKZbmBaYT5x6I6WtNKBZpAIY752HCbj0CnoMDf7oY8Mf1TkpA==
 
-"@tldraw/validate@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@tldraw/validate/-/validate-2.0.2.tgz#e03948a25d581f87167af7ffcdcc4d9cff937471"
-  integrity sha512-dc2WxVwDf4HKP0/5AXukv/gqjrEg2fNCbKTRrxGDgvXfsRe1Gg8o9cVYlzZLRmbvj1DL8ggw4DAvbyL1FZh5Gg==
+"@tldraw/validate@2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@tldraw/validate/-/validate-2.1.4.tgz#20825698d695c5fd7de7ad9a0f497a853b7f9f00"
+  integrity sha512-m1GUyCzaInw1USaMVaIPSnYbEbPPusNcpi91ql05DCDUnHO28XI+C7LNBQ+kWk2Z7LNtvrtCwD3N80xaSEPIzg==
   dependencies:
-    "@tldraw/utils" "2.0.2"
+    "@tldraw/utils" "2.1.4"
+
+"@tldraw/vec@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@tldraw/vec/-/vec-1.9.2.tgz#0b4719fd44dee57c414b82af8b38c2ccdbd27fef"
+  integrity sha512-k9vH52MRpJHjVcaahWu6VqvhLeE9h1qL5Z2gLobS9zTMpUJ59kBQPNo0VPzPlDYBpXdS4GxuB4jYQMnKvuPAZg==
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -2613,7 +2635,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@*":
+"@types/jest@*", "@types/jest@^29.5.12":
   version "29.5.12"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.5.12.tgz#7f7dc6eb4cf246d2474ed78744b05d06ce025544"
   integrity sha512-eDC8bTvT/QhYdxJAulQikueigY5AsdBRH2yDKW3yveW7svY3+DzN84/2NUgkw10RTiJbWqZrTtoGVdYlvFJdLw==
@@ -2647,6 +2669,13 @@
   version "20.12.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.12.7.tgz#04080362fa3dd6c5822061aa3124f5c152cff384"
   integrity sha512-wq0cICSkRLVaf3UGLMGItu/PtdY7oaXaI/RVU+xliKVOtRna3PRY57ZDfztpDL0n11vfymMUnXv8QwYCO7L1wg==
+  dependencies:
+    undici-types "~5.26.4"
+
+"@types/node@^20.12.11":
+  version "20.12.11"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.12.11.tgz#c4ef00d3507000d17690643278a60dc55a9dc9be"
+  integrity sha512-vDg9PZ/zi+Nqp6boSOT7plNuthRugEKixDv5sFTIpkE89MmNtEArAShI4mxuX2+UrLEe9pxC1vm2cjm9YlWbJw==
   dependencies:
     undici-types "~5.26.4"
 
@@ -2687,10 +2716,25 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-dom@^18.3.0":
+  version "18.3.0"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.3.0.tgz#0cbc818755d87066ab6ca74fbedb2547d74a82b0"
+  integrity sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*":
   version "18.2.79"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.79.tgz#c40efb4f255711f554d47b449f796d1c7756d865"
   integrity sha512-RwGAGXPl9kSXwdNTafkOEuFrTBD5SA2B3iEB96xi8+xu5ddUa/cpvyVCSNn+asgLCTHkb5ZxN8gbuibYJi4s1w==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^3.0.2"
+
+"@types/react@^18.3.2":
+  version "18.3.2"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.2.tgz#462ae4904973bc212fa910424d901e3d137dbfcd"
+  integrity sha512-Btgg89dAnqD4vV7R3hlwOxgqobUQKgx3MmrQRi0yYbs/P0ym8XozIAlkqVilPqHQwXs4e9Tf63rrCgl58BcO4w==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -2887,7 +2931,7 @@
   resolved "https://registry.yarnpkg.com/@use-gesture/core/-/core-10.3.1.tgz#976c9421e905f0079d49822cfd5c2e56b808fc56"
   integrity sha512-WcINiDt8WjqBdUXye25anHiNxPc0VOrlT8F6LLkU6cycrOGUDyY/yyFmsg3k8i5OLvv25llc0QC45GhR/C8llw==
 
-"@use-gesture/react@^10.2.27":
+"@use-gesture/react@^10.2.19", "@use-gesture/react@^10.2.27":
   version "10.3.1"
   resolved "https://registry.yarnpkg.com/@use-gesture/react/-/react-10.3.1.tgz#17a743a894d9bd9a0d1980c618f37f0164469867"
   integrity sha512-Yy19y6O2GJq8f7CHf7L0nxL8bf4PZCPaVOCgJrusOeFHY1LvHgYXnmnXg6N5iwAnbgbZCDjo60SiM6IPJi9C5g==
@@ -7730,6 +7774,11 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+perfect-freehand@^1.1.0:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/perfect-freehand/-/perfect-freehand-1.2.2.tgz#292f65b72df0c7f57a89c4b346b50d7139014172"
+  integrity sha512-eh31l019WICQ03pkF3FSzHxB8n07ItqIQ++G5UV8JX0zVOXzgTGCqnRR0jJ2h9U8/2uW4W4mtGJELt9kEV0CFQ==
+
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -9666,10 +9715,10 @@ thunky@^1.0.2:
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
 
-tldraw@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/tldraw/-/tldraw-2.0.2.tgz#2d4efd6671c363ceec53d1ea57b872fbd90c1f1d"
-  integrity sha512-qWIbsZkbCVcexGHtUBBjT28+upgzwSu3yImtQXRbfwDj8wbVadxxczAK9Uh6gSsRqlEx8WaQRu3Nkv/3QJSTQQ==
+tldraw@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/tldraw/-/tldraw-2.1.4.tgz#a237eca5dde62d2b2ab176942e16994cd7cf3ac7"
+  integrity sha512-ApmZW7HcP4w2ixJyvGkE3ZJyQ7gu8Fgc6qTiGVbu7zyOBo+0bABahOTf1dMY5xM+BLIwyWf+znlazAmtqKMb3Q==
   dependencies:
     "@radix-ui/react-alert-dialog" "^1.0.5"
     "@radix-ui/react-context-menu" "^2.1.5"
@@ -9679,7 +9728,8 @@ tldraw@^2.0.2:
     "@radix-ui/react-select" "^1.2.0"
     "@radix-ui/react-slider" "^1.1.0"
     "@radix-ui/react-toast" "^1.1.1"
-    "@tldraw/editor" "2.0.2"
+    "@tldraw/editor" "2.1.4"
+    "@tldraw/store" "2.1.4"
     canvas-size "^1.2.6"
     classnames "^2.3.2"
     hotkeys-js "^3.11.2"
@@ -9860,6 +9910,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript@^5.4.5:
+  version "5.4.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.4.5.tgz#42ccef2c571fdbd0f6718b1d1f5e6e5ef006f611"
+  integrity sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

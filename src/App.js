@@ -10,7 +10,16 @@ import "./index.css";
 import "tldraw/tldraw.css";
 import { useEffect, useLayoutEffect, useState } from "react";
 import Modal from "./components/Modal/Modal";
+import { SpeechBubbleTool } from './components/SpeechBubble/SpeechBubbleTool.tsx'
+import { SpeechBubbleUtil } from './components/SpeechBubble/SpeechBubbleUtil.tsx'
+import { components, customAssetUrls, uiOverrides } from './ui-overrides.tsx'
+import './customhandless.css'
 import NewBoardForm from "./components/NewBoardForm/NewBoardForm";
+import {TableUtil} from "./components/Table/TableUtil.tsx";
+import {TableTool} from "./components/Table/TableTool.tsx";
+
+const shapeUtils = [SpeechBubbleUtil, TableUtil]
+const tools = [SpeechBubbleTool, TableTool]
 
 function App() {
   function uuidv4() {
@@ -27,8 +36,10 @@ function App() {
   const [boards, setBoards] = useState([]);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
   const [newBoardTitle, setIsNewBoardTitle] = useState("");
   const [newBoardDescription, setIsNewBoardDescription] = useState("");
+  const [openedBoardId, setOpenedBoardId] = useState(null);
 
   const localStorageArray = JSON.parse(localStorage.getItem("boards"));
 
@@ -38,20 +49,17 @@ function App() {
 
   useEffect(() => {
     const TLBoardsArray = localStorageArray?.map((item) => ({
-      id: item.id,
-      boardName: item.boardName,
-      boardDescription: item.boardDescription,
-      store: createTLStore({ shapeUtils: defaultShapeUtils }),
-      loadingState: { status: "loading" },
+      ...item,
+      store: createTLStore({ shapeUtils: [ ...defaultShapeUtils, SpeechBubbleUtil, TableUtil ] }),
     }));
 
-    setBoards([...boards, ...TLBoardsArray]);
+    setBoards([...TLBoardsArray]);
   }, []);
 
   const addNewBoard = () => {
     const newBoard = {
       id: "board-" + uuidv4(),
-      store: createTLStore({ shapeUtils: defaultShapeUtils }),
+      store: createTLStore({ shapeUtils: [ ...defaultShapeUtils, SpeechBubbleUtil, TableUtil ] }),
       loadingState: { status: "loading" },
       boardName: newBoardTitle,
       boardDescription: newBoardDescription,
@@ -72,6 +80,53 @@ function App() {
     setIsNewBoardDescription("");
   };
 
+  const deleteBoard = (id) => {
+    const newBoards = boards.filter((board) => board.id !== id);
+    setBoards(newBoards);
+
+    const newBoardsArray = localStorageArray.filter((item) => item.id !== id);
+    const updatedArray = JSON.stringify(newBoardsArray);
+    localStorage.setItem("boards", updatedArray);
+
+    if (localStorage.getItem(id)) {
+      localStorage.removeItem(id.toString());
+    }
+  };
+
+  const updateBoard = (id) => {
+    const updatedBoards = boards.map((board) => {
+      if (board.id === id) {
+        return {
+          ...board,
+          boardName: newBoardTitle,
+          boardDescription: newBoardDescription,
+        };
+      }
+
+      return board;
+    });
+
+    setBoards(updatedBoards);
+
+    const updatedBoardsArray = localStorageArray.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          boardName: newBoardTitle,
+          boardDescription: newBoardDescription,
+        };
+      }
+      return item;
+    });
+
+    const updatedArray = JSON.stringify(updatedBoardsArray);
+    localStorage.setItem("boards", updatedArray);
+
+    setOpenedBoardId(null);
+    setIsOpenRenameModal(false);
+    setIsNewBoardTitle("");
+    setIsNewBoardDescription("");
+  };
   const [activeBoard, setActiveBoard] = useState(null);
 
   const [store] = useState(() =>
@@ -141,9 +196,20 @@ function App() {
   return (
     <div className="App">
       <NewBoardForm
+        title={"Новая доска"}
         isOpen={isOpenModal}
         onClose={() => setIsOpenModal(false)}
-        addNewBoard={addNewBoard}
+        onEnter={addNewBoard}
+        newBoardTitle={newBoardTitle}
+        newBoardDescription={newBoardDescription}
+        setIsNewBoardTitle={setIsNewBoardTitle}
+        setIsNewBoardDescription={setIsNewBoardDescription}
+      />
+      <NewBoardForm
+        title={"Переименование доски"}
+        isOpen={isOpenRenameModal}
+        onClose={() => setIsOpenRenameModal(false)}
+        onEnter={() => updateBoard(openedBoardId)}
         newBoardTitle={newBoardTitle}
         newBoardDescription={newBoardDescription}
         setIsNewBoardTitle={setIsNewBoardTitle}
@@ -171,8 +237,34 @@ function App() {
 
             {boards?.map((board) => (
               <div key={board.id} className="tldraw__board_container">
-                <h1 className="tldraw__title">{board.boardName}</h1>
-                <p className="tldraw__description">{board.boardDescription}</p>
+                <div className="tldraw__board_header">
+                  <h1
+                    className="tldraw__title"
+                    onClick={() => {
+                      setIsOpenRenameModal(true);
+                      setIsNewBoardTitle(board.boardName);
+                      setIsNewBoardDescription(board.boardDescription);
+                      setOpenedBoardId(board.id);
+                    }}
+                  >
+                    {board.boardName}
+                  </h1>
+                  <div
+                    className="tldraw__board_close"
+                    onClick={() => deleteBoard(board.id)}
+                  ></div>
+                </div>
+                <p
+                  className="tldraw__description"
+                  onClick={() => {
+                    setIsOpenRenameModal(true);
+                    setIsNewBoardTitle(board.boardName);
+                    setIsNewBoardDescription(board.boardDescription);
+                    setOpenedBoardId(board.id);
+                  }}
+                >
+                  {board.boardDescription}
+                </p>
                 <div className="tldraw__item">
                   <div
                     className="tldraw__item_cover"
@@ -186,6 +278,10 @@ function App() {
                     snapshot={board.snapshot}
                     className="tldraw__board disabled"
                     hideUi
+                    shapeUtils={shapeUtils}
+                    tools={tools}
+                    overrides={uiOverrides}
+                    components={components}
                   />
                 </div>
               </div>
@@ -204,8 +300,13 @@ function App() {
             {`<<`} Назад
           </p>
           <Tldraw
-            store={activeBoard.store}
             style={{ position: "absolute", zIndex: -1 }}
+            store={activeBoard.store}
+            shapeUtils={shapeUtils}
+            assetUrls={customAssetUrls}
+            tools={tools}
+            overrides={uiOverrides}
+            components={components}
           />
         </div>
       )}

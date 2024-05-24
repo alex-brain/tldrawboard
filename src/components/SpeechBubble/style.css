@@ -1,0 +1,29 @@
+.tl-html-container {
+  padding: 0;
+}
+
+.table-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-block {
+  height: 100%;
+  display: flex;
+}
+
+.table-line {
+  display: flex;
+  width: 100%;
+  height: 50%;
+}
+
+.table-block input {
+  width: 100%;
+  text-align: center;
+
+  font-family: 'tldraw_draw', sans-serif;
+  font-size: 22px;
+}

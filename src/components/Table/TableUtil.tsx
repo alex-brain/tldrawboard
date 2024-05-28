@@ -5,6 +5,9 @@ import {
   DefaultSizeStyle,
   DefaultVerticalAlignStyle,
   Geometry2d,
+  TEXT_PROPS,
+  FONT_FAMILIES,
+  LABEL_FONT_SIZES,
   Polygon2d,
   ShapePropsType,
   ShapeUtil,
@@ -198,6 +201,16 @@ export class TableUtil extends ShapeUtil<TableShape> {
       }
     };
 
+    const PADDING = 17
+
+    const style = {
+      ...TEXT_PROPS,
+      fontFamily: FONT_FAMILIES[shape.props.font],
+      fontSize: LABEL_FONT_SIZES[shape.props.size],
+      maxWidth: shape.props.w - PADDING * 2,
+    }
+
+
     return (
       <HTMLContainer
         style={{
@@ -214,6 +227,7 @@ export class TableUtil extends ShapeUtil<TableShape> {
             <div className="table-block">
               <input
                 type="text"
+                style={{ ...style }}
                 value={shape.props.text[0]}
                 onChange={(e) =>
                   this.editor.updateShape<TableShape>({
@@ -227,6 +241,7 @@ export class TableUtil extends ShapeUtil<TableShape> {
             <div className="table-block">
               <input
                 type="text"
+                style={{ ...style }}
                 value={shape.props.text[1]}
                 onChange={(e) =>
                   this.editor.updateShape<TableShape>({
@@ -242,6 +257,7 @@ export class TableUtil extends ShapeUtil<TableShape> {
             <div className="table-block">
               <input
                 type="text"
+                style={{ ...style }}
                 value={shape.props.text[2]}
                 onChange={(e) =>
                   this.editor.updateShape<TableShape>({
@@ -255,6 +271,7 @@ export class TableUtil extends ShapeUtil<TableShape> {
             <div className="table-block">
               <input
                 type="text"
+                style={{ ...style }}
                 value={shape.props.text[3]}
                 onChange={(e) =>
                   this.editor.updateShape<TableShape>({

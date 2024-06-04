@@ -50,7 +50,6 @@ export const tableShapeProps = {
   verticalAlign: DefaultVerticalAlignStyle,
   growY: T.positiveNumber,
   text: T.arrayOf(T.string), // Массив строк
-  // fieldCells: T.arrayOf(T.any), // Массив строк
   tail: vecModelValidator,
   isCreateTable: T.boolean,
   data: T.optional(
@@ -105,7 +104,7 @@ export class TableUtil extends ShapeUtil<TableShape> {
       // @ts-ignore
       verticalAlign: "start",
       growY: 0,
-      text: ["", "", "", ""], // Массив строк с 4 пустыми значениями
+      text: ["", "", "", "", "", "", "", "", "", "", ""], // Массив строк с 4 пустыми значениями
       tail: { x: 0, y: 0 },
       isCreateTable: false,
       data: {
@@ -116,7 +115,6 @@ export class TableUtil extends ShapeUtil<TableShape> {
         row: 0,
         col: 0,
       },
-      // fieldCells: [],
     };
   }
 
@@ -130,9 +128,6 @@ export class TableUtil extends ShapeUtil<TableShape> {
       points: tableGeometry,
       isFilled: true,
     });
-    // console.log('123'); here!!!!!
-    // console.log(shape.props);
-
     return body;
   }
 
@@ -271,14 +266,14 @@ export class TableUtil extends ShapeUtil<TableShape> {
                         type="text"
                         value={
                           shape.props.text[
-                            rowIndex * shape.props.data.cols + colIndex
-                          ]
+                          rowIndex * shape.props.data.cols + colIndex
+                            ]
                         }
                         onChange={(e) => {
                           const updatedText = [...shape.props.text];
                           updatedText[
-                            rowIndex * shape.props.data.cols + colIndex
-                          ] = e.currentTarget.value;
+                          rowIndex * shape.props.data.cols + colIndex
+                            ] = e.currentTarget.value;
                           this.editor.updateShape<TableShape>({
                             id: shape.id,
                             type: "table",
@@ -314,6 +309,7 @@ export class TableUtil extends ShapeUtil<TableShape> {
                     rows,
                     cols,
                   },
+                  text: new Array(rows * cols).fill('')
                 },
               });
             }}

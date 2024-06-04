@@ -1,0 +1,21 @@
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #3182ed;
+}
+
+.cell.filled {
+  background-color: #3182ed70;
+}

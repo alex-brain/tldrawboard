@@ -411,8 +411,6 @@ export class TableUtil extends ShapeUtil<TableShape> {
   }
 
   getGrowY(shape: TableShape, prevGrowY = 0) {
-    // console.log('shape.props.activeH', shape.props.activeH)
-    // console.log('shape.props.h GET GROWY', shape.props.h)
     const PADDING = 10;
 
     let resultH;

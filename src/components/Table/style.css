@@ -27,3 +27,18 @@
   font-family: 'tldraw_draw', sans-serif;
   font-size: 22px;
 }
+
+.textarea__input {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: 2px solid black;
+  outline: none;
+  font-family: 'tldraw_draw', sans-serif;
+  font-size: 22px;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}

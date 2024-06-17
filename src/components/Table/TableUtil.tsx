@@ -5,6 +5,9 @@ import {
   DefaultSizeStyle,
   DefaultVerticalAlignStyle,
   Geometry2d,
+  LABEL_FONT_SIZES,
+  FONT_FAMILIES,
+  TEXT_PROPS,
   Polygon2d,
   ShapePropsType,
   ShapeUtil,
@@ -52,6 +55,9 @@ export const tableShapeProps = {
   text: T.arrayOf(T.string), // Массив строк
   tail: vecModelValidator,
   isCreateTable: T.boolean,
+  activeCell: T.any,
+  activeH: T.any,
+  minH: T.any,
   data: T.optional(
     T.nullable(
       T.object({
@@ -94,19 +100,29 @@ export class TableUtil extends ShapeUtil<TableShape> {
       w: 356,
       h: 254,
       // @ts-ignore
-      color: "black",
+      // color: "black",
+      color: DefaultColorStyle,
       // @ts-ignore
-      size: "m",
+      // size: "m",
+      size: DefaultSizeStyle,
+
       // @ts-ignore
-      font: "draw",
+      font: DefaultFontStyle,
+      // font: "draw",
       // @ts-ignore
-      align: "middle",
+      // align: "middle",
+      align: DefaultHorizontalAlignStyle,
+
       // @ts-ignore
-      verticalAlign: "start",
+      // verticalAlign: "start",
+      verticalAlign: DefaultVerticalAlignStyle,
+      // @ts-ignore
       growY: 0,
-      text: ["", "", "", "", "", "", "", "", "", "", ""], // Массив строк с 4 пустыми значениями
+      text: [], // Массив строк с 4 пустыми значениями
       tail: { x: 0, y: 0 },
       isCreateTable: false,
+      activeCell: null,
+      activeH: 150,
       data: {
         rows: 0,
         cols: 0,
@@ -115,6 +131,7 @@ export class TableUtil extends ShapeUtil<TableShape> {
         row: 0,
         col: 0,
       },
+      minH: 0,
     };
   }
 
@@ -244,6 +261,13 @@ export class TableUtil extends ShapeUtil<TableShape> {
     };
     const isEditing = this.editor.getEditingShapeId() === shape.id;
 
+    const divEl = document.querySelector(
+      `#cell-${shape.props.activeCell}`
+    );
+    // console.log('divEl', divEl);
+    // console.log('divEl h', divEl?.clientHeight);
+
+
     return (
       <HTMLContainer
         id={shape.id}
@@ -261,24 +285,58 @@ export class TableUtil extends ShapeUtil<TableShape> {
                 {Array.from(
                   { length: shape.props.data.cols },
                   (_, colIndex) => (
-                    <div key={colIndex} className="table-block">
-                      <input
-                        type="text"
+                    <div key={colIndex} className="table-block" style={{}}>
+                      <div
+                        id={`cell-${
+                          rowIndex * shape.props.data.cols + colIndex
+                        }`}
+                        className="tl-text-wrapper"
+                        data-font={font}
+                        data-align={align}
+                        style={{
+                          position: "absolute",
+                          zIndex: -1,
+                          width: 100 / shape.props.data.cols + "%",
+                          height: "fit-content",
+                          wordBreak: "break-all",
+                          padding: 10,
+                          fontSize: LABEL_FONT_SIZES[size],
+                          lineHeight: TEXT_PROPS.lineHeight,
+                        }}
+                      >
+                        {text[rowIndex * shape.props.data.cols + colIndex]}
+                      </div>
+                      <textarea
+                        data-font={font}
+                        data-align={align}
+                        style={{
+                          color: theme[color].solid,
+                          fontSize: LABEL_FONT_SIZES[size],
+                          lineHeight: TEXT_PROPS.lineHeight,
+                          padding: 10,
+                          wordBreak: "break-all",
+                          minHeight: "100%",
+                          height: divEl?.offsetHeight,
+                        }}
+                        className="textarea__input tl-text-wrapper"
                         value={
                           shape.props.text[
-                          rowIndex * shape.props.data.cols + colIndex
-                            ]
+                            rowIndex * shape.props.data.cols + colIndex
+                          ]
                         }
                         onChange={(e) => {
                           const updatedText = [...shape.props.text];
                           updatedText[
-                          rowIndex * shape.props.data.cols + colIndex
-                            ] = e.currentTarget.value;
+                            rowIndex * shape.props.data.cols + colIndex
+                          ] = e.currentTarget.value;
                           this.editor.updateShape<TableShape>({
                             id: shape.id,
                             type: "table",
                             props: {
                               text: updatedText,
+                              activeCell:
+                                rowIndex * shape.props.data.cols + colIndex,
+                              activeH: divEl?.offsetHeight ,
                             },
                           });
                         }}
@@ -309,11 +367,22 @@ export class TableUtil extends ShapeUtil<TableShape> {
                     rows,
                     cols,
                   },
-                  text: new Array(rows * cols).fill('')
                 },
               });
             }}
-            // fieldCells={[shape.props.hovered.row, shape.props.hovered.col]}
+            createTextArray={(rows, cols) => {
+              const emptyTextArray = Array.from(
+                { length: rows * cols },
+                () => ""
+              );
+              this.editor.updateShape<TableShape>({
+                id: shape.id,
+                type: "table",
+                props: {
+                  text: emptyTextArray,
+                },
+              });
+            }}
           />
         )}
       </HTMLContainer>
@@ -336,31 +405,72 @@ export class TableUtil extends ShapeUtil<TableShape> {
     return next;
   };
 
-  getGrowY(shape: TableShape, prevGrowY = 0) {
-    const PADDING = 17;
-    /*const nextTextSize = this.editor.textMeasure.measureText(shape.props.text[0], {
-      ...TEXT_PROPS,
-      fontFamily: FONT_FAMILIES[shape.props.font],
-      fontSize: LABEL_FONT_SIZES[shape.props.size],
-      maxWidth: shape.props.w - PADDING * 2,
-    })*/
 
-    // const nextHeight = nextTextSize.h + PADDING * 2
+  getMinH(shape: TableShape, h) {
+    return h > shape.props.minH ? h : shape.props.minH;
+  }
+
+  getGrowY(shape: TableShape, prevGrowY = 0) {
+    // console.log('shape.props.activeH', shape.props.activeH)
+    // console.log('shape.props.h GET GROWY', shape.props.h)
+    const PADDING = 10;
+
+    let resultH;
+
+    if (shape.props.data?.rows > 0) {
+      const firstLineHeight = 256 / shape.props.data?.rows;
+
+      const lineHeight = shape.props.h / shape.props.data?.rows;
+
+      const deltaLH = lineHeight - firstLineHeight;
+
+      if (shape.props.h / shape.props.data?.rows < shape.props.activeH) {
+        const delta = shape.props.activeH - lineHeight;
+        // console.log('delta if', delta )
+
+        // shape.props.h = shape.props.h + delta - deltaLH;
+        shape.props.h = this.getMinH(shape, shape.props.h + delta + 50);
+        resultH = this.getMinH(shape, shape.props.h + delta + 50);
+      } else {
+        const delta = lineHeight - shape.props.activeH;
+        // console.log('delta else', delta)
+        shape.props.h = this.getMinH(shape, shape.props.h - delta + 50);
+        resultH = this.getMinH(shape, shape.props.h - delta + 50);
+      }
+    } else {
+      shape.props.h = 256;
+      resultH = 256;
+    }
+
+    // const nextTextSize = this.editor.textMeasure.measureText(
+    //   shape.props.text[0],
+    //   {
+    //     ...TEXT_PROPS,
+    //     fontFamily: FONT_FAMILIES[shape.props.font],
+    //     fontSize: LABEL_FONT_SIZES[shape.props.size],
+    //     maxWidth: shape.props.w - PADDING * 2,
+    //   }
+    // );
+
+    // const nextHeight = nextTextSize.h + PADDING * 2;
 
     let growY = 0;
 
-    /*    if (nextHeight > shape.props.h) {
-          growY = nextHeight - shape.props.h
-        } else {
-          if (prevGrowY) {
-            growY = 0
-          }
-        }*/
+    // if (nextHeight > shape.props.h) {
+    //   growY = nextHeight - shape.props.h;
+    // } else {
+    //   if (prevGrowY) {
+    //     growY = 0;
+    //   }
+    // }
+    
 
     return {
       ...shape,
       props: {
         ...shape.props,
+        minH: resultH,
+        h: resultH,
         growY,
       },
     };

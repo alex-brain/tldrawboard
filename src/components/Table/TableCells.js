@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TableCells.css';
 
-const Cell = ({ row, col, handleMouseEnter, isFilled, onHover, onClick }) => {
+const Cell = ({ row, col, handleMouseEnter, isFilled, onHover, onClick, createTextArray }) => {
   return (
     <div
       className={`cell ${isFilled ? 'filled' : ''}`}
@@ -12,12 +12,13 @@ const Cell = ({ row, col, handleMouseEnter, isFilled, onHover, onClick }) => {
       }}
       onMouseDown={() => {
         onClick(row, col)
+        createTextArray(row, col)
       }}
     ></div>
   );
 };
 
-const Row = ({ row, handleMouseEnter, filledCells, onHover, onClick }) => {
+const Row = ({ row, handleMouseEnter, filledCells, onHover, onClick, createTextArray }) => {
   const renderCells = () => {
     const cells = [];
     for (let col = 1; col <= 10; col++) {
@@ -31,6 +32,7 @@ const Row = ({ row, handleMouseEnter, filledCells, onHover, onClick }) => {
           isFilled={isFilled}
           onHover={onHover}
           onClick={onClick}
+          createTextArray={createTextArray}
         />
       );
     }
@@ -44,7 +46,7 @@ const Row = ({ row, handleMouseEnter, filledCells, onHover, onClick }) => {
   );
 };
 
-const Grid = ({ onHover, onClick  }) => {
+const Grid = ({ onHover, onClick, createTextArray  }) => {
   const [filledCells, setFilledCells] = useState([]); // 
 // console.log(filledCells);
   const handleMouseEnter = (row, col) => {
@@ -60,7 +62,7 @@ const Grid = ({ onHover, onClick  }) => {
 
   const renderRows = () => {
     const rows = [];
-    for (let row = 1; row <= 7; row++) {
+    for (let row = 1; row <= 10; row++) {
       rows.push(
         <Row
           key={`row-${row}`}
@@ -69,6 +71,7 @@ const Grid = ({ onHover, onClick  }) => {
           filledCells={filledCells}
           onHover={onHover}
           onClick={onClick}
+          createTextArray={createTextArray}
         />
       );
     }
@@ -82,10 +85,10 @@ const Grid = ({ onHover, onClick  }) => {
   );
 };
 
-const TableCells = ({ onHover, onClick  }) =>{
+const TableCells = ({ onHover, onClick, createTextArray  }) =>{
   return (
   <div className="TableCells">
-    <Grid onHover={onHover} onClick={onClick}  />
+    <Grid onHover={onHover} onClick={onClick} createTextArray={createTextArray}  />
   </div>
 )};
 
